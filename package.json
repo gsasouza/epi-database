@@ -1,0 +1,22 @@
+{
+  "name": "update-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^1.26.1",
+    "express": "^4.15.3",
+    "http": "0.0.0",
+    "mongoose": "^4.10.7",
+    "node-schedule": "^1.2.3",
+    "redis": "^2.7.1",
+    "unrar.js": "^0.2.4",
+    "winston": "^2.3.1",
+    "winston-daily-rotate-file": "^1.4.6"
+  }
+}
