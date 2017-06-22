@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
 
 var epiModel = new Schema({
   caNumber: {
-    type: Number
+    type: String
   },
   shelfLife: {
     type: String
@@ -12,7 +12,7 @@ var epiModel = new Schema({
     type: String
   },
   processNumber: {
-    type: Number
+    type: String
   },
   equipamentName: {
     type: String
@@ -58,7 +58,7 @@ var epiModel = new Schema({
       type: String
     },
     laboratoryCnpj:{
-      type: Number
+      type: String
     }
   }],
   // Normas

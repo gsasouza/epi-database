@@ -1,5 +1,5 @@
 const logger = require('../config/logger');
-const redis = require('../config/redis')(logger);
+//const redis = require('../config/redis')(logger);
 const http = require('http');
 const fs = require('fs');
 const unrar = require('unrar.js');
@@ -121,6 +121,7 @@ const getEpi = function(req, res){
       res.status(400);
       return res.send(err);
     }
+    if(!doc) return res.send("achou não")
     res.status(200);
     return res.send(doc);
   })
