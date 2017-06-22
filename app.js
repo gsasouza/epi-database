@@ -22,4 +22,4 @@ app.get('/', (req, res)=>{
   res.send('COÉ RAPAZIADAAAA!');
 })
 
-app.listen(port, ()=>{console.log('Runing')});
+app.listen(port, ()=>{console.log('Runing on ' + port)});
