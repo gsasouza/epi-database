@@ -129,6 +129,5 @@ const getEpi = function(req, res){
 
 module.exports = {
   downloadFile,
-  getEpi,
-  doe
+  getEpi
 }
