@@ -14,7 +14,7 @@ const epiRouter = require('./routes/epiRouter')(epiController);
 
 const rule = new schedule.RecurrenceRule();
 rule.hour = 00;
-rule.minute = 42;
+rule.minute = 45;
 schedule.scheduleJob(rule, epiController.downloadFile)
 
 app.use('/api', epiRouter);
