@@ -1,5 +1,5 @@
 const logger = require('../config/logger');
-//const redis = require('../config/redis')(logger);
+const redis = require('../config/redis')(logger);
 const http = require('http');
 const fs = require('fs');
 const unrar = require('unrar.js');
@@ -78,7 +78,7 @@ const eliminateDuplicatedCa = function(epis, cb){
       epiMap.set(epi.caNumber, epi);
     }
   }, this);
-  epis = []
+  epis = [];
   epiMap.forEach((value, key)=>{
     epis.push(value);
   });
@@ -126,9 +126,7 @@ const getEpi = function(req, res){
     return res.send(doc);
   })
 }
-const doe = function(){
-  console.log('foi')
-}
+
 module.exports = {
   downloadFile,
   getEpi,
