@@ -6,15 +6,15 @@ const port = process.env.PORT || 8080;
 
 const app = express();
 
-mongoose.connect('mongodb://:@mongodb.suicideveil.com:27017');
+mongoose.connect('mongodb://gabriel:gabriel123@ds135382.mlab.com:35382/acrux-epi-database');
 mongoose.Promise = global.Promise;
 
 const epiController = require('./controllers/epiController');
 const epiRouter = require('./routes/epiRouter')(epiController);
 
 const rule = new schedule.RecurrenceRule();
-rule.hour = 00;
-rule.minute = 45;
+rule.hour = 18;
+rule.minute = 18;
 schedule.scheduleJob(rule, epiController.downloadFile)
 
 app.use('/api', epiRouter);
