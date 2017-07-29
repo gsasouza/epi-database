@@ -12,6 +12,7 @@
   "dependencies": {
     "config": "^1.26.1",
     "express": "^4.15.3",
+    "gulp": "^3.9.1",
     "http": "0.0.0",
     "mongoose": "^4.10.7",
     "node-schedule": "^1.2.3",

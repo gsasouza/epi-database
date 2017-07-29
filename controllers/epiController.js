@@ -121,7 +121,10 @@ const getEpi = function(req, res){
       res.status(400);
       return res.send(err);
     }
-    if(!doc) return res.send("achou não")
+    if(!doc) {
+      res.status(404);
+      return res.send("achou não");
+    }
     res.status(200);
     return res.send(doc);
   })
