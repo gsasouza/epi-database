@@ -119,14 +119,14 @@ const getEpi = function(req, res){
     if(err){
       logger.error(err);
       res.status(400);
-      return res.send(err);
+      return res.send({status: 400, message: err});
     }
     if(!doc) {
       res.status(404);
-      return res.send("achou não");
+      return res.send({status: 404, message: 'EPI Not Found'});
     }
     res.status(200);
-    return res.send(doc);
+    return res.send({status: 200, message: 'EPI found successfully', data: doc});
   })
 }
 

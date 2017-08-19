@@ -6,7 +6,8 @@ const port = process.env.PORT || 8080;
 
 const app = express();
 
-mongoose.connect('mongodb://gabriel:gabriel123@ds135382.mlab.com:35382/acrux-epi-database');
+mongoose.connect('mongodb://gabriel:gabriel123@ds135382.mlab.com:35382/acrux-epi-database', {useMongoClient: true});
+
 mongoose.Promise = global.Promise;
 
 const epiController = require('./controllers/epiController');
@@ -19,7 +20,7 @@ schedule.scheduleJob(rule, epiController.downloadFile)
 
 app.use('/api', epiRouter);
 app.get('/', (req, res)=>{
-  res.send('COÉ RAPAZIADAAAA!');
+  res.sendFile(__dirname+'/views/index.html')
 })
 
 app.listen(port, ()=>{console.log('Runing on ' + port)});
