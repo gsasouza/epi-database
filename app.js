@@ -1,26 +1,22 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const schedule = require('node-schedule');
+global.Promise = require('bluebird');
 
 const port = process.env.PORT || 8080;
+const mongoUrl = process.env.MONGODB_URL;
+const epi = require('./components/epi');
 
 const app = express();
+epi.model.keepUpdated();
 
-mongoose.connect('mongodb://gabriel:gabriel123@ds135382.mlab.com:35382/acrux-epi-database', {useMongoClient: true});
-
+mongoose.connect(mongoUrl, {useMongoClient: true});
 mongoose.Promise = global.Promise;
 
-const epiController = require('./controllers/epiController');
-const epiRouter = require('./routes/epiRouter')(epiController);
+app.use('/api', epi.router);
 
-const rule = new schedule.RecurrenceRule();
-rule.hour = 18;
-rule.minute = 18;
-schedule.scheduleJob(rule, epiController.downloadFile)
-
-app.use('/api', epiRouter);
 app.get('/', (req, res)=>{
-  res.sendFile(__dirname+'/views/index.html')
-})
+  res.sendFile(__dirname + '/views/index.html')
+});
 
 app.listen(port, ()=>{console.log('Runing on ' + port)});
