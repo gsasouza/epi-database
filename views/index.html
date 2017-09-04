@@ -8,8 +8,11 @@
 
 <script>
  $(document).ready(()=>{
-  $(document).on('click', '#search', function () {
+  $(document).on('click', '#search', function () { 
     window.location.href='/api/'+ $('#caNumber').val();
+  });
+  $(document).keydown(function (e) {
+    if ((e.keyCode || e.which) == 13) window.location.href='/api/'+ $('#caNumber').val();
   });
  })
 
