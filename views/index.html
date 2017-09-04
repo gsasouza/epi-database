@@ -12,6 +12,7 @@
     window.location.href='/api/'+ $('#caNumber').val();
   });
   $(document).keydown(function (e) {
+    console.log('here');
     if ((e.keyCode || e.which) == 13) window.location.href='/api/'+ $('#caNumber').val();
   });
  })

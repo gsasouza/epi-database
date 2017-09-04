@@ -17,7 +17,7 @@ const logger = new winston.Logger({
 			patchGlobal: true
 		})
 	],
-	exitOnError: false;
+	exitOnError: false
 });
 
 module.exports = logger;
