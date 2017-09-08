@@ -7,7 +7,7 @@ const opts = {
 const client =  redis.createClient(opts.port, opts.host );
 
 module.exports = function(logger){
-  client.on('error', (err)=> logger.error(err));
+  client.on('error', (err)=> logger.log('error', err));
   return client;
 }
 

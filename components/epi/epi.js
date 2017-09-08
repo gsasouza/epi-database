@@ -112,14 +112,25 @@ epiSchema.methods.create = function (epi) {
 
 const Epi = mongoose.model('Epi', epiSchema);
 
-
-const downloadFile = function () {
+const keepUpdated = function(){
   const filePath = './tmp/tgg_export_caepi.rar';
+  downloadFile(filePath)
+    .then(()=> extractFile(filePath))
+    .then((fileName)=> readFile(fileName))
+    .then((epis) => updateDatabase(epis))
+    .then(()=> deleteFiles())
+    .then(()=> logger.log('info', 'Database atualizada'))
+    .catch((err)=> logger.log('error', err);
+
+}
+
+const downloadFile = function (filePath) {
+  
   const url = 'http://www3.mte.gov.br/sistemas/CAEPI_Arquivos/tgg_export_caepi.zip';
 
-  logger.info('Donwload Iniciado');
+  logger.log('info', 'Donwload Iniciado');
   let lastModifiedInfo = '';
-  redis.getAsync('lastModifiedInfo')
+  return redis.getAsync('lastModifiedInfo')
     .then((value)=>{
       lastModifiedInfo = value;
       return axios.get(url, {responseType: 'arraybuffer'})
@@ -131,33 +142,36 @@ const downloadFile = function () {
       }
       return;      
     })
+    /*
     .then(()=> extract(filePath))
-    .catch((err) => logger.error(err))
+    .catch((err) => logger.log('error', err));*/
 };
 
 const extract = function (filePath) {
-  logger.info('Iniciada Extração');
-  unrar.unrar(filePath, './tmp', {}, (err, unpackedFiles) => {
-    if (err) return logger.error(err);
-    logger.info('Extração Finalizada');
-    return readFile(unpackedFiles[0].toString());
-  });
+  logger.log('info', 'Iniciada Extração');
+  return new Promise((resolve, reject)=> {
+    unrar.unrar(filePath, './tmp', {}, (err, unpackedFiles) => {
+      if (err) return reject(err);
+      logger.log('info', 'Extração Finalizada');
+      return resolve(unpackedFiles[0].toString()); //readFile(unpackedFiles[0].toString());
+    });
+  })  
 };
 
 const readFile = function (filePath) {
-  logger.info('Leitura Iniciada');
-  
+  logger.log('info', 'Leitura Iniciada');  
   fs.readFileAsync(filePath, 'binary')
     .then((file)=>{
-      if (!file) return logger.warn(`Arquivo ${filePath} Vazio`);
+      if (!file) return logger.log('warn', `Arquivo ${filePath} Vazio`);
       const epis = file.split('\r\n')
         .filter((epi) => epi.split('|').length === 19)
         .map(epi => new Epi().create(epi));
       return eliminateDuplicatedCa(epis);
     })
+    /*
     .then((epis)=> {
-      updateDatabase(0, epis);
-    })
+      ;
+    });*/
 }
 
 const eliminateDuplicatedCa = function (epis) {
@@ -173,49 +187,44 @@ const eliminateDuplicatedCa = function (epis) {
       else return epiMap.set(epi.caNumber, epi);
     });
     resolve(Array.from(epis)); 
-  })
-  
-  /*
-  let epiMap = new Map();
-  epis.forEach(function (epi) {
-    let uniqueEpi = epiMap.get(epi.caNumber);
-    if (uniqueEpi) {
-      uniqueEpi.norms = _.union(uniqueEpi.norms, epi.norms);
-      uniqueEpi.report = _.union(uniqueEpi.report, epi.report);
-      epiMap.set(uniqueEpi.caNumber, uniqueEpi);
-    } else {
-      epiMap.set(epi.caNumber, epi);
-    }
-  }, this);
-  epis = [];
-  epiMap.forEach((value, key) => {
-    epis.push(value);
-  });
-  return cb(epis);
-  */
+  });  
 }
 
 const updateDatabase = function (index, epis) {
+  return async.eachSeries(epis, (epi, cb)=>{
+    Epi.findOne({ caNumber: epi.caNumber })
+      .then((doc)=>{
+        return Object.assign(doc, epi).saveAsync();
+      })
+      .then(()=> cb())
+      .catch((err) => {
+        logger.log(err);
+        cb();
+      })
+  })
+  /*
   let epi = epis[index];
   if (index < epis.length && epis[index] != '') {
     return Epi.findOne({ caNumber: epi.caNumber}, (err, doc) => {
-      if (err) logger.error(err);
+      if (err) logger.log('error', err);
       Object.assign(doc, epi).save(
         (err) => {
-        if (err) return logger.error(err);
+        if (err) return logger.log('error', err);
         return updateDatabase(index++, epis)
       })
     })
   }
-  logger.debug('Update Finalizado');
+  logger.log('info', 'Update Finalizado');
   return deleteFiles();
+  */
 }
 
 const deleteFiles = function () {
   fs.unlinkAsync('./tmp/tgg_export_caepi.rar')
-    .then(()=> fs.unlink('./tmp/tgg_export_caepi.txt'))
-    .then(()=> logger.info('Database Atualizada'))
-    .catch((err)=> logger.error(err))
+    .then(()=> fs.unlinkAsync('./tmp/tgg_export_caepi.txt'))
+    /*
+    .then(()=> logger.log('info', 'Database Atualizada'))
+    .catch((err)=> logger.log('error', err));*/
 }
 
 const keepUpdated = function(){
@@ -234,7 +243,20 @@ const getEpi = function (req, res) {
     .catch((err) => res.send({status: 400, message: err}))
 }
 
-module.exports = {
-  keepUpdated, 
-  getEpi
-}
+module.exports = env === 'test'
+  ? 
+  {
+    downloadFile,
+    extract,
+    readFile,
+    eliminateDuplicatedCa,
+    updateDatabase,
+    deleteFiles,
+    keepUpdated, 
+    getEpi
+  }
+  : 
+  {
+    keepUpdated, 
+    getEpi
+  }

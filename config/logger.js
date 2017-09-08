@@ -2,6 +2,7 @@ const winston = require('winston');
 const Sentry = require('winston-sentry');
 winston.emitErrs = true;
 const sentryDsn = process.env.RAVEN_URL;
+const env = process.env.ENV;
 
 const logger = new winston.Logger({
 	transports: [
@@ -20,4 +21,5 @@ const logger = new winston.Logger({
 	exitOnError: false
 });
 
-module.exports = logger;
+
+module.exports = env === 'test' ? ()=>{} : logger;
