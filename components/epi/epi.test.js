@@ -34,7 +34,7 @@ describe('Epi', () => {
     let fileName = '';
     let data = [];
     it('Should download a file', function(done){
-      this.timeout(20000);
+      this.timeout(30000);
       Epi.downloadFile(filePath)
         .then(()=> fs.readFileAsync(filePath, 'binary'))
         .then(()=> done())

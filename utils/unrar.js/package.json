@@ -1,0 +1,93 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "unrar.js@^0.2.4",
+        "scope": null,
+        "escapedName": "unrar.js",
+        "name": "unrar.js",
+        "rawSpec": "^0.2.4",
+        "spec": ">=0.2.4 <0.3.0",
+        "type": "range"
+      },
+      "D:\\dev\\acrux\\epi-database"
+    ]
+  ],
+  "_from": "unrar.js@>=0.2.4 <0.3.0",
+  "_id": "unrar.js@0.2.4",
+  "_inCache": true,
+  "_location": "/unrar.js",
+  "_nodeVersion": "6.9.1",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/unrar.js-0.2.4.tgz_1494264250584_0.4591977128293365"
+  },
+  "_npmUser": {
+    "name": "boggan42",
+    "email": "boggan@gmail.com"
+  },
+  "_npmVersion": "3.10.8",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "unrar.js@^0.2.4",
+    "scope": null,
+    "escapedName": "unrar.js",
+    "name": "unrar.js",
+    "rawSpec": "^0.2.4",
+    "spec": ">=0.2.4 <0.3.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/unrar.js/-/unrar.js-0.2.4.tgz",
+  "_shasum": "ec40d726dc71beb61d25a350b0a3f31c4e524c8f",
+  "_shrinkwrap": null,
+  "_spec": "unrar.js@^0.2.4",
+  "_where": "D:\\dev\\acrux\\epi-database",
+  "author": {
+    "name": "Thomas Lanteigne"
+  },
+  "bugs": {
+    "url": "https://github.com/boggan/unrar.js/issues"
+  },
+  "dependencies": {
+    "mkdirp": "^0.5.1"
+  },
+  "description": "Pure javascript unrar library. salvaged from bitjs.",
+  "devDependencies": {},
+  "directories": {
+    "test": "test"
+  },
+  "dist": {
+    "shasum": "ec40d726dc71beb61d25a350b0a3f31c4e524c8f",
+    "tarball": "https://registry.npmjs.org/unrar.js/-/unrar.js-0.2.4.tgz"
+  },
+  "gitHead": "c4abf24a635b7f22edf26749551b262a0f801939",
+  "homepage": "https://github.com/boggan/unrar.js#readme",
+  "keywords": [
+    "unrar",
+    "unarchived",
+    "archive",
+    "bitjs"
+  ],
+  "license": "MIT",
+  "main": "unrar.js",
+  "maintainers": [
+    {
+      "name": "boggan42",
+      "email": "boggan@gmail.com"
+    }
+  ],
+  "name": "unrar.js",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boggan/unrar.js.git"
+  },
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "version": "0.2.4"
+}

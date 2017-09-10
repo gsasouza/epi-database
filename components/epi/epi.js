@@ -5,7 +5,7 @@ const axios = require('axios');
 const logger = require('../../config/logger');
 const redis = require('../../config/redis')(logger);
 const fs = Promise.promisifyAll(require('fs'));
-const Unrar = require('node-unrar');
+const unrar = require('../../utils/unrar.js');
 const _ = require('lodash');
 const schedule = require('node-schedule');
 const async = require('promise-async');
@@ -150,11 +150,10 @@ const downloadFile = function (filePath) {
 const extract = function (filePath) {
   logger.log('info', 'Iniciada Extração');
   return new Promise((resolve, reject)=> {
-    const rar = new Unrar(filePath);
-    rar.extract('./tmp', null, (err)=> {
+    unrar.unrar(filePath, './tmp', {}, (err, unpackedFiles) => {
       if (err) return reject(err);
       logger.log('info', 'Extração Finalizada');
-      return resolve('./tmp/tgg_export_caepi.txt'); //readFile(unpackedFiles[0].toString());
+      return resolve(unpackedFiles[0].toString()); //readFile(unpackedFiles[0].toString());
     });
   })  
 };
