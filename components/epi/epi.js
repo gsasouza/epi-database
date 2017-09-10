@@ -151,8 +151,7 @@ const extract = function (filePath) {
   logger.log('info', 'Iniciada Extração');
   return new Promise((resolve, reject)=> {
     const rar = new Unrar(filePath);
-    rar.extract('./tmp', null, ())
-    unrar.unrar(filePath, './tmp', {}, (err) => {
+    rar.extract('./tmp', null, (err)=> {
       if (err) return reject(err);
       logger.log('info', 'Extração Finalizada');
       return resolve('./tmp/tgg_export_caepi.txt'); //readFile(unpackedFiles[0].toString());
