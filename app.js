@@ -13,10 +13,12 @@ epi.model.keepUpdated();
 mongoose.connect(mongoUrl, {useMongoClient: true});
 mongoose.Promise = global.Promise;
 
-app.use('/api', epi.router);
+app.use('/api/epis', epi.router);
 
 app.get('/', (req, res)=>{
   res.sendFile(__dirname + '/views/index.html')
 });
 
 app.listen(port, ()=>{console.log('Runing on ' + port)});
+
+module.exports = app;

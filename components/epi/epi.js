@@ -1,3 +1,5 @@
+global.Promise = require('bluebird');
+const env = process.env.NODE_ENV;
 const mongoose = Promise.promisifyAll(require('mongoose'));
 const axios = require('axios');
 const logger = require('../../config/logger');
@@ -6,6 +8,7 @@ const fs = Promise.promisifyAll(require('fs'));
 const unrar = require('unrar.js');
 const _ = require('lodash');
 const schedule = require('node-schedule');
+const async = require('promise-async');
 
 const epiSchema = new mongoose.Schema({
   caNumber: {
@@ -120,14 +123,13 @@ const keepUpdated = function(){
     .then((epis) => updateDatabase(epis))
     .then(()=> deleteFiles())
     .then(()=> logger.log('info', 'Database atualizada'))
-    .catch((err)=> logger.log('error', err);
+    .catch((err)=> logger.log('error', err));
 
 }
 
 const downloadFile = function (filePath) {
   
   const url = 'http://www3.mte.gov.br/sistemas/CAEPI_Arquivos/tgg_export_caepi.zip';
-
   logger.log('info', 'Donwload Iniciado');
   let lastModifiedInfo = '';
   return redis.getAsync('lastModifiedInfo')
@@ -140,11 +142,9 @@ const downloadFile = function (filePath) {
         redis.set('lastModifiedInfo', response.headers['last-modified']);
         return fs.writeFileAsync(filePath, response.data);
       }
+      if(env === 'test') return fs.writeFileAsync(filePath, response.data);
       return;      
     })
-    /*
-    .then(()=> extract(filePath))
-    .catch((err) => logger.log('error', err));*/
 };
 
 const extract = function (filePath) {
@@ -160,9 +160,9 @@ const extract = function (filePath) {
 
 const readFile = function (filePath) {
   logger.log('info', 'Leitura Iniciada');  
-  fs.readFileAsync(filePath, 'binary')
+  return fs.readFileAsync(filePath, 'binary')
     .then((file)=>{
-      if (!file) return logger.log('warn', `Arquivo ${filePath} Vazio`);
+      if (!file) return;
       const epis = file.split('\r\n')
         .filter((epi) => epi.split('|').length === 19)
         .map(epi => new Epi().create(epi));
@@ -175,7 +175,7 @@ const readFile = function (filePath) {
 }
 
 const eliminateDuplicatedCa = function (epis) {
-  return new Promise((resolve, reject)=>{
+  return new Promise((resolve, reject)=> {
     const epiMap = new Map();
     epis.map((epi)=>{
       const uniqueEpi = epiMap.get(epi.caNumber);
@@ -186,11 +186,11 @@ const eliminateDuplicatedCa = function (epis) {
       }
       else return epiMap.set(epi.caNumber, epi);
     });
-    resolve(Array.from(epis)); 
+    return resolve(Array.from(epis)); 
   });  
 }
 
-const updateDatabase = function (index, epis) {
+const updateDatabase = function (epis) {
   return async.eachSeries(epis, (epi, cb)=>{
     Epi.findOne({ caNumber: epi.caNumber })
       .then((doc)=>{
@@ -220,14 +220,14 @@ const updateDatabase = function (index, epis) {
 }
 
 const deleteFiles = function () {
-  fs.unlinkAsync('./tmp/tgg_export_caepi.rar')
+  return fs.unlinkAsync('./tmp/tgg_export_caepi.rar')
     .then(()=> fs.unlinkAsync('./tmp/tgg_export_caepi.txt'))
     /*
     .then(()=> logger.log('info', 'Database Atualizada'))
     .catch((err)=> logger.log('error', err));*/
 }
 
-const keepUpdated = function(){
+const keepUpdated2 = function(){
   const rule = new schedule.RecurrenceRule();
   rule.hour = 18
   rule.minute = 31
