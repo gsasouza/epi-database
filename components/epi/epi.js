@@ -115,7 +115,7 @@ epiSchema.methods.create = function (epi) {
 
 const Epi = mongoose.model('Epi', epiSchema);
 
-const keepUpdated = function(){
+const update = function(){
   const filePath = './tmp/tgg_export_caepi.rar';
   downloadFile(filePath)
     .then(()=> extractFile(filePath))
@@ -153,7 +153,7 @@ const extract = function (filePath) {
     unrar.unrar(filePath, './tmp', {}, (err, unpackedFiles) => {
       if (err) return reject(err);
       logger.log('info', 'Extração Finalizada');
-      return resolve(unpackedFiles[0].toString()); //readFile(unpackedFiles[0].toString());
+      return resolve(unpackedFiles[0].toString()); 
     });
   })  
 };
@@ -168,10 +168,6 @@ const readFile = function (filePath) {
         .map(epi => new Epi().create(epi));
       return eliminateDuplicatedCa(epis);
     })
-    /*
-    .then((epis)=> {
-      ;
-    });*/
 }
 
 const eliminateDuplicatedCa = function (epis) {
@@ -201,37 +197,19 @@ const updateDatabase = function (epis) {
         logger.log(err);
         cb();
       })
-  })
-  /*
-  let epi = epis[index];
-  if (index < epis.length && epis[index] != '') {
-    return Epi.findOne({ caNumber: epi.caNumber}, (err, doc) => {
-      if (err) logger.log('error', err);
-      Object.assign(doc, epi).save(
-        (err) => {
-        if (err) return logger.log('error', err);
-        return updateDatabase(index++, epis)
-      })
-    })
-  }
-  logger.log('info', 'Update Finalizado');
-  return deleteFiles();
-  */
+  })  
 }
 
 const deleteFiles = function () {
   return fs.unlinkAsync('./tmp/tgg_export_caepi.rar')
     .then(()=> fs.unlinkAsync('./tmp/tgg_export_caepi.txt'))
-    /*
-    .then(()=> logger.log('info', 'Database Atualizada'))
-    .catch((err)=> logger.log('error', err));*/
 }
 
-const keepUpdated2 = function(){
+const keepUpdated = function(){
   const rule = new schedule.RecurrenceRule();
-  rule.hour = 18
-  rule.minute = 31
-  return schedule.scheduleJob(rule, ()=> console.log('here'))// epiController.downloadFile)
+  rule.hour = 18;
+  rule.minute = 31;
+  return schedule.scheduleJob(rule, ()=> update());
 }
 
 const getEpi = function (req, res) {
