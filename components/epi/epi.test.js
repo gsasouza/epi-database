@@ -34,7 +34,7 @@ describe('Epi', () => {
     let fileName = '';
     let data = [];
     it('Should download a file', function(done){
-      this.timeout(30000);
+      this.timeout(180000);
       Epi.downloadFile(filePath)
         .then(()=> fs.readFileAsync(filePath, 'binary'))
         .then(()=> done())
@@ -45,9 +45,9 @@ describe('Epi', () => {
       Epi.extract(filePath)
         .then((file)=> {
           fileName = file;
-          fs.readFileAsync(file, 'binary');    
+          fs.existsSync(file).should.be.eql(true);  
+          done();
         })
-        .then(()=> done())
         .catch((err)=> done(err));
     });
     it('Should read a file', function(done){
@@ -69,10 +69,13 @@ describe('Epi', () => {
     });
     it('Should delete a file', function(done){
       this.timeout(15000);
-      Epi.deleteFile()
-        .then(()=> fs.readFileAsync(file, 'binary'))
-        .then(()=> done())
+      Epi.deleteFiles()
+        .then(() => {
+          fs.existsSync('./tmp/tgg_export_caepi.rar').should.be.eql(false);
+          fs.existsSync('./tmp/tgg_export_caepi.txt').should.be.eql(false);
+          done();
+        })
         .catch((err)=> done(err));
-    })
+    });
   });
 });
