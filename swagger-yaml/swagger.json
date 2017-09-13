@@ -1,0 +1,150 @@
+---
+swagger: "2.0"
+info:
+  description: "API para consulta de EPI pelo CA utilizando a base de dados do Ministé\
+    rio do Trabalho"
+  version: "1.0.0"
+  title: "EPI Database"
+  contact:
+    email: "contact@gabrielsouza.me"
+basePath: "/api"
+schemes:
+- "https"
+paths:
+  /epi/{caNumber}:
+    get:
+      summary: "Search an EPI with the CA passed in parameter"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "caNumber"
+        in: "path"
+        description: "CA you want to search"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "return the EPI"
+          schema:
+            $ref: "#/definitions/Response200"
+        404:
+          description: "EPI not found"
+          schema:
+            $ref: "#/definitions/Response404"
+        500:
+          description: "Unexpected Server"
+          schema:
+            $ref: "#/definitions/Response500"
+definitions:
+  Manufacturer:
+    type: "object"
+    properties:
+      cnpj:
+        type: "string"
+        example: "58533209000109"
+      companyName:
+        type: "string"
+        example: "DVS EQUIPAMENTOS DE PROTECAO INDIVIDUAL LTDA"
+  Report:
+    type: "object"
+    properties:
+      reportNumber:
+        type: "string"
+        example: "305/2012-A"
+      laboratoryName:
+        type: "string"
+        example: "FUNDACENTRO - FUNDAÇÃO JORGE DUPRAT FIGUEIREDO DE SEG E MED DO TRABALHO"
+      laboratoryCnpj:
+        type: "string"
+        example: "62428073000136"
+  Epi:
+    type: "object"
+    required:
+    - "caNumber"
+    properties:
+      caNumber:
+        type: "string"
+        example: "9722"
+      shelfLife:
+        type: "string"
+        example: "26/11/2017"
+      situation:
+        type: "string"
+        example: "VÁLIDO"
+      processNumber:
+        type: "string"
+        example: "46017012653201203"
+      equipamentName:
+        type: "string"
+        example: "ÓCULOS"
+      description:
+        type: "string"
+        example: "Óculos de segurança constituído de um arco de material plástico\
+          \ preto, com um pino central e uma fenda em cada extremidade..."
+      nature:
+        type: "string"
+        example: "Importado"
+      color:
+        type: "string"
+        example: "PRETO"
+      caMarcation:
+        type: "string"
+        example: "Na haste"
+      references:
+        type: "string"
+        example: "DA-14500"
+      aprovedFor:
+        type: "string"
+        example: "PROTEÇÃO DOS OLHOS DO USUÁRIO CONTRA IMPACTOS DE PARTÍCULAS VOLANTES\
+          \ MULTIDIRECIONAIS E CONTRA LUMINOSIDADE INTENSA NO CASO DOS VISORES CINZA\
+          \ E VERDE."
+      restrictions:
+        type: "string"
+        example: ""
+      manufacturer:
+        $ref: "#/definitions/Manufacturer"
+      report:
+        type: "array"
+        items:
+          $ref: "#/definitions/Report"
+      norms:
+        type: "array"
+        items:
+          type: "string"
+          example: "ANSI.Z.87.1/2003"
+      observations:
+        type: "string"
+        example: "A transmitância luminosa do visores cinza e verde indica que eles\
+          \ seriam de tonalidade 3.0 e 2.5..."
+  Response200:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+        example: "200"
+      message:
+        type: "string"
+        example: "EPI found successfully"
+      data:
+        $ref: "#/definitions/Epi"
+  Response404:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+        example: "404"
+      message:
+        type: "string"
+        example: "EPI Not Found"
+  Response500:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+        example: "500"
+      message:
+        type: "string"
+        example: "Unexpected Server"
+      description:
+        type: "string"
+        example: "Some error mesage"
