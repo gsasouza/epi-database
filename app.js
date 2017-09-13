@@ -16,10 +16,10 @@ mongoose.connect(mongoUrl, {useMongoClient: true});
 mongoose.Promise = global.Promise;
 
 swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
-  app.use(middleware.swaggerUi());  
-  epi.model.keepUpdated();
-  
+  app.use(middleware.swaggerUi()); 
+  app.get('/', (req, res)=> res.redirect('/docs'));  
   app.use('/api/epis', epi.router);
+  epi.model.keepUpdated();
 
   app.listen(port, ()=>{console.log('Runing on ' + port)});
 
