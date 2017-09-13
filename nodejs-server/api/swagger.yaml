@@ -8,6 +8,9 @@ info:
   contact:
     email: "contact@gabrielsouza.me"
 basePath: "/api"
+tags:
+- name: "EPI"
+  description: "Equipamento de Proteção Individual"
 schemes:
 - "https"
 paths:
