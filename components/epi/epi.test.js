@@ -9,13 +9,11 @@ chai.should();
 chai.use(chaiHttp);
 
 describe('Epi', () => {
-  
   describe('Get an Epi /GET -> /api/epis/:caNumber', () => {
-
     it('Should list one epi', (done) => {
       chai.request(app).get('/api/epis/9722').end((err, res) => {
         res.body.should.have.property('status').eql(200);
-        res.body.data.should.be.an('object')
+        res.body.data.should.be.an('object');
         done();
       });
     });
@@ -23,34 +21,34 @@ describe('Epi', () => {
     it('Should not found a epi', (done) => {
       chai.request(app).get('/api/epis/1').end((err, res) => {
         res.body.should.have.property('status').eql(404);
-        res.body.should.be.an('object')
+        res.body.should.be.an('object');
         done();
       });
     });
   });
-  
+
   describe('Update Database Functions', ()=> {
     const filePath = './tmp/tgg_export_caepi.rar';
     let fileName = '';
     let data = [];
-    it('Should download a file', function(done){
+    it('Should download a file', function (done) {
       this.timeout(999999999);
       Epi.downloadFile(filePath)
         .then(()=> fs.readFileAsync(filePath, 'binary'))
         .then(()=> done())
         .catch((err)=> done(err));
     });
-    it('Should extract a file', function(done){
+    it('Should extract a file', function (done) {
       this.timeout(10000);
       Epi.extract(filePath)
         .then((file)=> {
           fileName = file;
-          fs.existsSync(file).should.be.eql(true);  
+          fs.existsSync(file).should.be.eql(true);
           done();
         })
         .catch((err)=> done(err));
     });
-    it('Should read a file', function(done){
+    it('Should read a file', function (done) {
       this.timeout(15000);
       Epi.readFile(fileName)
         .then((epis)=> {
@@ -61,13 +59,13 @@ describe('Epi', () => {
         })
         .catch((err)=> done(err));
     });
-    it('Should update the database', function(done){
+    it('Should update the database', function (done) {
       this.timeout(15000);
       Epi.updateDatabase(data)
         .then(()=> done())
         .catch((err)=> done(err));
     });
-    it('Should delete a file', function(done){
+    it('Should delete a file', function (done) {
       this.timeout(15000);
       Epi.deleteFiles()
         .then(() => {

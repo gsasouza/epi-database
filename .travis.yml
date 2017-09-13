@@ -1,6 +1,6 @@
-language: node_js
-node_js:
-  - "7.7"
+#language: node_js
+#node_js:
+#  - "7.7"
 #deploy:
  # provider: heroku
   #api_key: 0205d8fc-fc37-4ced-9d35-d7be8f592bc1

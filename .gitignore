@@ -2,3 +2,5 @@ node_modules
 .vscode
 script
 tmp/*
+.nyc_output
+coverage
