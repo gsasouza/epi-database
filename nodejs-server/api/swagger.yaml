@@ -8,14 +8,13 @@ info:
   contact:
     email: "contact@gabrielsouza.me"
 basePath: "/api"
-tags:
-- name: "EPI"
-  description: "Equipamento de Proteção Individual"
 schemes:
 - "https"
 paths:
   /epi/{caNumber}:
     get:
+      tags:
+      - "EPI"
       summary: "Search an EPI with the CA passed in parameter"
       operationId: "epiCaNumberGET"
       produces:
@@ -39,7 +38,7 @@ paths:
           description: "Unexpected Server"
           schema:
             $ref: "#/definitions/Response500"
-      x-swagger-router-controller: "Default"
+      x-swagger-router-controller: "EPI"
 definitions:
   Manufacturer:
     type: "object"
