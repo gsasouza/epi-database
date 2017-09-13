@@ -14,7 +14,7 @@ tags:
 - name: EPI
   description: Equipamento de Proteção Individual
 paths:
-  /epi/{caNumber}:
+  /epis/{caNumber}:
     get:
       tags: 
       - EPI
