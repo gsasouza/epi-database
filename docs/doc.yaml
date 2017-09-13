@@ -10,9 +10,14 @@ info:
 basePath: "/api"
 schemes:
 - "https"
+tags: 
+- name: EPI
+  description: Equipamento de Proteção Individual
 paths:
   /epi/{caNumber}:
     get:
+      tags: 
+      - EPI
       summary: "Search an EPI with the CA passed in parameter"
       produces:
       - "application/json"

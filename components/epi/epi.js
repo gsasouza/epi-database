@@ -35,8 +35,7 @@ const epiSchema = new mongoose.Schema({
   // Fabricante
   manufacturer: {
     cnpj: {
-      type: Number
-      //required: true
+      type: String
     },
     companyName: {
       type: String
@@ -218,7 +217,7 @@ const getEpi = function (req, res) {
       if(!doc) return res.status(404).send({ status: 404, message: 'EPI Not Found' });
       return res.status(200).send({status: 200, message: 'EPI found successfully', data: doc}); 
     })
-    .catch((err) => res.send({status: 400, message: err}))
+    .catch((err) => res.send({status: 500, message: 'Unexpected Server', description: err}))
 }
 
 module.exports = env === 'test'
